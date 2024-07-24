@@ -27,13 +27,60 @@ Admin can delete any dashboard. Basic user can only delete their own dashboard. 
 - Utilize reasonable data modeling practices.
   - yes
 - Create GET routes for all data that should be exposed to the client, using appropriate query commands to retrieve the data from the database.
+
+```js
+router.get(
+  "/:dashboardId",
+  setDashboard,
+  authUser,
+  authGetDashboard,
+  (req, res) => {
+    res.json(req.dashboard);
+  }
+);
+```
+
 - Create POST routes for data, as appropriate, using appropriate insertion commands to add data to the database. At least one data collection should allow for client creation via a POST request.
 - Create PATCH or PUT routes for data, as appropriate, using appropriate update commands to change data in the database. At least one data collection should allow for client manipulation via a PATCH or PUT request.
+
+```js
+router.patch(
+  "/:dashboardId",
+  setDashboard,
+  authUser,
+  authPatchDashboard,
+  async (req, res) => {
+    const updatedDashboard = await Dashboard.findByIdAndUpdate(
+      req.params.dashboardId,
+      req.body
+    );
+    res.json(updatedDashboard);
+  }
+);
+```
+
 - Create DELETE routes for data, as appropriate, using appropriate delete commands to remove data from the database. At least one data collection should allow for client deletion via a DELETE request.
+
+```js
+router.delete(
+  "/:dashboardId",
+  setDashboard,
+  authUser,
+  authDeleteDashboard,
+  async (req, res) => {
+    const deletedDashboard = await Dashboard.findByIdAndDelete(
+      req.params.dashboardId
+    );
+    res.json(deletedDashboard);
+  }
+);
+```
+
 - Include sensible MongoDB data validation rules for at least one data collection.
   Note: this may be accomplished in a number of ways. If you choose to perform this task outside of your application's code, you must include a way to test the validation within the application's routes. This can be as simple as providing a POST route that attempts to create an invalid document and displays the resulting error.
 - Populate your application's collections with sample data illustrating the use case of the collections. You must include at least five sample documents per collection.
   Note: Double-check this requirement before submission. Testing your delete routes may leave you under the requirement. To be safe, populate your collections with sample data well above the requirement (we recommend 10-20 documents).
+  - users and dashboards have 10 documents each. The Occupational Employment and Wage Statistics file has over 80000 lines.
 - Utilize reasonable code organization practices.
   - codes are grouped in different folders such as data related in the db folder, schemas are in models folder, routes are in routes folder, and other js scripts are in src folder.
 - Ensure that the program runs without errors (comment out things that do not work, and explain your blockers - you can still receive partial credit).
@@ -42,3 +89,4 @@ Admin can delete any dashboard. Basic user can only delete their own dashboard. 
 ## Sources
 
 - https://catalog.data.gov/dataset/occupational-employment-statistics
+- https://www.youtube.com/watch?v=jI4K7L-LI58

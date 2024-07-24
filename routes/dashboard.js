@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Dashboard = require("../models/dashboardModel");
-
+const Job = require("../models/jobModel");
+// const jobsRouter = require("./jobs");
 const { authUser } = require("../basicAuth");
 const {
   canViewDashboard,
@@ -35,10 +36,10 @@ router.patch(
       req.params.dashboardId,
       req.body
     );
-
     res.json(updatedDashboard);
   }
 );
+
 router.delete(
   "/:dashboardId",
   setDashboard,
@@ -51,6 +52,42 @@ router.delete(
     res.json(deletedDashboard);
   }
 );
+
+router.get("/:dashboardId/jobs", async (req, res) => {
+  const theseJobs = await Job.find({
+    dashboardId: req.params.dashboardId,
+  });
+  res.send(theseJobs);
+});
+router.post("/:dashboardId/jobs", async (req, res) => {
+  const reqbody = req.body;
+  reqbody.dashboardId = req.params.dashboardId; //lololol this works
+  console.log(reqbody);
+  const newJob = new Job(reqbody);
+  // newJob.save();
+  let error;
+  try {
+    await newJob.save();
+    res.send(newJob);
+  } catch (err) {
+    res.send({ errorMessage: err });
+  }
+
+  // assert.equal(
+  //   error.errors["dashboardId"].message,
+  //   "Path `dashboardId` is required."
+  // );
+
+  // error = cat.validateSync();
+  // assert.equal(
+  //   error.errors["dashboardId"].message,
+  //   "Path `dashboardId` is required."
+  // );
+});
+router.get("/:dashboardId/jobs/:jobId", async (req, res) => {
+  const thisJob = await Job.findById(req.params.jobId);
+  res.send(thisJob);
+});
 
 async function setDashboard(req, res, next) {
   const dashboardId = req.params.dashboardId;

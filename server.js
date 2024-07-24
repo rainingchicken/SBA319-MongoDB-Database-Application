@@ -9,6 +9,7 @@ const Dashboard = require("./models/dashboardModel");
 const setUser = require("./src/setUser");
 const seed = require("./src/seed");
 const conn = require("./db/conn");
+const Job = require("./models/jobModel");
 conn();
 
 app.use(express.json());
@@ -28,6 +29,7 @@ app.get("/seed", async (req, res) => {
   try {
     await User.deleteMany({});
     await Dashboard.deleteMany({});
+    await Job.deleteMany({});
     await seed();
     res.json({ msg: "Data inserted" });
   } catch (error) {

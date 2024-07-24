@@ -1,44 +1,44 @@
 const ROLE = require("./roles");
 const users = [
   {
-    name: "rain",
+    username: "rain",
     role: ROLE.ADMIN,
   },
   {
-    name: "ray",
+    username: "ray",
     role: ROLE.BASIC,
   },
   {
-    name: "scar",
+    username: "scar",
     role: ROLE.BASIC,
   },
   {
-    name: "monty",
+    username: "monty",
     role: ROLE.BASIC,
   },
   {
-    name: "python",
+    username: "python",
     role: ROLE.BASIC,
   },
   {
-    name: "aang",
+    username: "aang",
     role: ROLE.BASIC,
   },
   {
-    name: "ultraman",
+    username: "ultraman",
     role: ROLE.BASIC,
   },
   {
-    name: "inosuke",
+    username: "inosuke",
     role: ROLE.BASIC,
   },
   {
-    name: "miku",
+    username: "miku",
     role: ROLE.BASIC,
   },
   {
-    name: "luffy",
+    username: "luffy",
     role: ROLE.BASIC,
   },
 ];
-module.export = users;
+module.exports = users;
