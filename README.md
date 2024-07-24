@@ -1,4 +1,6 @@
-# SBA 319 MongoDB
+# SBA 319 MongoDB Database Application
+
+This is an assignment for Per Scholas. This is the backend to a job tracker application where users can keep track of jobs they are interested in applying to.
 
 ## ROLES
 
