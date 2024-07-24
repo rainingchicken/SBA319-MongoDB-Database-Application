@@ -11,6 +11,7 @@ const {
   scopedDashboards,
 } = require("../src/permissions/dashboard");
 
+//DASHBOARD ROUTE
 router.get("/", authUser, async (req, res) => {
   const dashboards = await Dashboard.find();
   res.json(scopedDashboards(req.user, dashboards));
@@ -53,42 +54,58 @@ router.delete(
   }
 );
 
+//JOBS ROUTE
 router.get("/:dashboardId/jobs", async (req, res) => {
-  const theseJobs = await Job.find({
-    dashboardId: req.params.dashboardId,
-  });
-  res.send(theseJobs);
+  try {
+    const theseJobs = await Job.find({
+      dashboardId: req.params.dashboardId,
+    });
+    res.send(theseJobs);
+  } catch (error) {
+    res.status(404).send({ errorMessage: error });
+  }
 });
 router.post("/:dashboardId/jobs", async (req, res) => {
   const reqbody = req.body;
   reqbody.dashboardId = req.params.dashboardId; //lololol this works
-  console.log(reqbody);
   const newJob = new Job(reqbody);
-  // newJob.save();
   let error;
   try {
     await newJob.save();
     res.send(newJob);
   } catch (err) {
-    res.send({ errorMessage: err });
+    res.status(409).send({ errorMessage: err });
   }
-
-  // assert.equal(
-  //   error.errors["dashboardId"].message,
-  //   "Path `dashboardId` is required."
-  // );
-
-  // error = cat.validateSync();
-  // assert.equal(
-  //   error.errors["dashboardId"].message,
-  //   "Path `dashboardId` is required."
-  // );
 });
+
 router.get("/:dashboardId/jobs/:jobId", async (req, res) => {
-  const thisJob = await Job.findById(req.params.jobId);
-  res.send(thisJob);
+  try {
+    const thisJob = await Job.findById(req.params.jobId);
+    res.send(thisJob);
+  } catch (error) {
+    res.status(404).send({ errorMessage: error });
+  }
 });
 
+router.patch("/:dashboardId/jobs/:jobId", async (req, res) => {
+  try {
+    const updatedJob = await Job.findByIdAndUpdate(req.params.jobId, req.body);
+    res.send(updatedJob);
+  } catch (error) {
+    res.status(404).send({ errorMessage: error });
+  }
+});
+
+router.delete("/:dashboardId/jobs/:jobId", async (req, res) => {
+  try {
+    const deletedJob = await Job.findByIdAndDelete(req.params.jobId);
+    res.send(deletedJob);
+  } catch (error) {
+    res.status(404).send({ errorMessage: error });
+  }
+});
+
+//SET UPS
 async function setDashboard(req, res, next) {
   const dashboardId = req.params.dashboardId;
   const dashboards = await Dashboard.find();

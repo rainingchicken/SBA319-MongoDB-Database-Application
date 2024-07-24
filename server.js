@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
+const PORT = process.env.PORT || 3001;
 const { authUser, authRole } = require("./basicAuth");
 const ROLE = require("./db/roles");
 const dashboardRouter = require("./routes/dashboard");
@@ -36,4 +37,6 @@ app.get("/seed", async (req, res) => {
     console.log(`Something went wrong loading seed data: ${error.message}`);
   }
 });
-app.listen(3000);
+app.listen(PORT, () => {
+  console.log(`Server is running on port: ${PORT}`);
+});
